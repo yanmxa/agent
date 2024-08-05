@@ -17,6 +17,6 @@ class Agent:
   def execute(self):
     chat_completion = self.client.chat.completions.create(
       messages=self.messages,
-      model="llama3-8b-8192"
+      model="llama3-70b-8192"
     )
     return chat_completion.choices[0].message.content

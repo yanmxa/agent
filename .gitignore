@@ -2,3 +2,5 @@
 .vscode
 __pycache__
 .ipynb_*
+agent.cast
+agent.gif

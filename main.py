@@ -27,9 +27,13 @@ google:
 e.g. google: France
 Returns the information of France from searching google
 
-Always look things up on Wikipedia if you have the opportunity to do so.
+news:
+e.g. news: France
+Returns the latest of news about the France from NEWSDATA.IO. Use it when trying to get the realtime information!
 
-Example session:
+Always look things up on google if you have the opportunity to do so.
+
+Example session 1:
 
 Question: What is the capital of France?
 Thought: I should look up France on Wikipedia
@@ -44,6 +48,8 @@ You then output:
 
 Answer: The capital of France is Paris
 
+Example session 2:
+
 Question: What is the capital of China?
 Thought: I should look up France on Wikipedia
 Action: wikipedia: China
@@ -53,13 +59,21 @@ You will be called again with this:
 
 Observation: China, officially the People's Republic of China (PRC), is a country in East Asia. With a population exceeding 1.4 billion, it is the world's second-most
 
-Thought: I didn't get the Capital of China from Wikipedia, Let me try it with google
+Thought: I didn't get the Capital of China from Wikipedia, I'm trying to find the answer in NEWSDATA.IO
+Action: news: China
+PAUSE
+
+You will be called again with this:
+
+Observation: Zheng Qinwen summons inner strength to claim China’s first Olympic singles gold medal with victory against Donna Vekić
+
+Thought: I didn't get the Capital of China from NEWSDATA.IO, Let me try it with google
 Action: google: China
 PAUSE
 
 You will be called again with this:
 
-Observation: officially the People's Republic of China (PRC), is a country in East Asia. With a population exceeding 1.4 billion, it is the world's second-most ...; Summary: Reconsider travel to Mainland China due to the arbitrary enforcement of local laws, including in relation to exit bans, and the risk of wrongful ...
+Observation: officially the People's Republic of China (PRC), is a country in East Asia. With a population exceeding 1.4 billion, it is the world's second-most ...
 
 Thought: I still didn't get the Capital of China, it seems like I got a lot of extra information instead
 Action: google: capital of China
@@ -80,7 +94,7 @@ client = Groq(
     api_key=os.getenv('GROQ_API_KEY'),
 )
 
-def query(question, max_turns=5):
+def query(question, max_turns=10):
     i = 0
     bot = Agent(client, prompt)
     next_prompt = question
@@ -91,7 +105,7 @@ def query(question, max_turns=5):
         print(">> Reasoning with the prompt/observation:")
         print(result)
         if "Answer" in result:
-          return "You get the point"
+          return ""
           
         actions = [action_re.match(a) for a in result.split('\n') if action_re.match(a)]
         if actions:
@@ -107,4 +121,4 @@ def query(question, max_turns=5):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        print(query(sys.argv[1]))
+        query(sys.argv[1])
