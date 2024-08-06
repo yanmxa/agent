@@ -55,7 +55,8 @@ You get the point
 ```
 
 - Sample 2
-
+  [![asciicast](https://asciinema.org/a/670804.svg)](https://asciinema.org/a/670804)
+  
 ```bash
 ❯ python main.py "Is Fan Zhendong win the Grand Slam of Table Tennis in 2024?"
 ======================================== Iterations 1 =============================================
