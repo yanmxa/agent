@@ -1,10 +1,8 @@
-# ai-agent
-
 ## ReAct: Combine the reasoning and acting capabilities
 
 *"Instead of asking GPT to simply do smart-autocomplete on your text, you prompt it to respond in a thought/act/observation loop"*
 
-## Samples
+### Samples
 
 - Sample 1
 
@@ -90,11 +88,11 @@ Thought: Ah-ha! I finally found the answer. According to the observation, Fan Zh
 Answer: Yes, Fan Zhendong has won the Grand Slam of Table Tennis.
 ```
 
-## References
+### References
 
 - The Paper: [ReAct: Synergizing Reasoning and Acting in Language Models](https://react-lm.github.io/)
 
-- Materials: 
+- Materials:
   - [A simple Python implementation of the ReAct pattern for LLMs](https://til.simonwillison.net/llms/python-react-pattern)
   - [Interconnected The surprising ease and effectiveness of AI in a loop](https://interconnected.org/home/2023/03/16/singularity)
 

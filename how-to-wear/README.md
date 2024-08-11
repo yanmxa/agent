@@ -1,4 +1,4 @@
-# What to Wear?
+# How to Wear?
 
 It's just for fun! Let's build a multi-agent system that can advise you on what to wear based on various factors like weather, location, fashion trends, and even designer-level insights. We can include the following agents in the system:
 
