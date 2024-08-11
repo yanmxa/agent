@@ -5,3 +5,4 @@ __pycache__
 agent.cast
 agent.gif
 .cache
+.DS_Store
