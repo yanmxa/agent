@@ -14,7 +14,7 @@ prompt = """
 You run in a loop of Thought, Action, PAUSE, Observation.
 At the end of the loop you output an Answer
 Use Thought to describe your thoughts about the question you have been asked.
-Use Action to run one of the actions available to you - then return PAUSE.
+Use Action to run one of the actions available to you - then return PAUSE(These tree steps should be together unless you get the answer!).
 Observation will be the result of running those actions.
 
 Your available actions are:
@@ -104,8 +104,6 @@ def query(question, max_turns=10):
         result = bot(next_prompt)
         print(">> Reasoning with the prompt/observation:")
         print(result)
-        if "Answer" in result:
-          return ""
           
         actions = [action_re.match(a) for a in result.split('\n') if action_re.match(a)]
         if actions:
@@ -116,9 +114,12 @@ def query(question, max_turns=10):
             observation = known_actions[action](action_input)
             print(">> Observation:", observation)
             next_prompt = "Observation: {}".format(observation)
+        elif "Answer" in result:
+            return 
         else:
-            return
-
+            print(f"## Not found the related action and answer for the agent!")
+            return 
+          
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         query(sys.argv[1])
