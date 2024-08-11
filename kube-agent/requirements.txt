@@ -1,0 +1,5 @@
+python>=3.11
+pyautogen==0.2.33
+kubernetes==30.1.0
+groq==0.9.0
+python-dotenv==1.0.1
