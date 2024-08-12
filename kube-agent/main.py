@@ -1,7 +1,7 @@
 import os
 import autogen
 import argparse
-from kube_agent import kube_engineer, kube_identifier, user_agent
+from kube_agent import kube_engineer, kube_executor, user_proxy
 from tools import KubeTool
 
 from dotenv import load_dotenv
@@ -22,14 +22,13 @@ llm_config = {
 def main(prompt: str):
     kube_tool = KubeTool()
     engineer = kube_engineer(llm_config, kube_tool)
+    executor = kube_executor(kube_tool)
 
-    expert = kube_identifier(llm_config)
-
-    user = user_agent()
+    user = user_proxy()
 
     manager = autogen.GroupChatManager(
         groupchat=autogen.GroupChat(
-            agents=[user, expert, engineer],
+            agents=[user, engineer, executor],
             messages=[],
             max_round=10,
         ),
@@ -39,10 +38,10 @@ def main(prompt: str):
     user.initiate_chat(
         manager,
         clear_history=True,
-        message="""Provide the user with the details from their kubernetes cluster in the provided PROMPT."""
-        """find the api version and kind of the kubernetes resources from the discovered api list"""
-        """infer the api version and kind by fuzzy matching with resources in PROMPT"""
-        """PROMPT: {{prompt}}""",
+        message="""
+        Try to analyze the user provided PROMPT by the "Kubernetes Engineer"
+        
+        PROMPT: {{prompt}}""",
     )
 
 
