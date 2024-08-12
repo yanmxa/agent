@@ -43,7 +43,7 @@ As rule-based agents could not simulate complex behaviors, subsequent efforts ai
 
   <img src="./asset/ai-agent.png" width="380" height="160" alt="ai-agent">
 
-The capabilities by AI agents, driven by LLMs and deep neural networks, are astonishing! Perhaps a super assistant like "Jarvis" from Iron Man will become a reality in the near future, reshaping how we work and live, much like the Industrial Revolution did for humanity.
+The capabilities by AI agents, driven by LLMs(more flexible for migration) and deep neural networks, are astonishing! Perhaps a super assistant like "Jarvis" from Iron Man will become a reality in the near future, reshaping how we work and live, much like the Industrial Revolution did for humanity.
 
 ## Image Reference
 
