@@ -69,7 +69,7 @@ def kube_engineer(llm_config: dict):
         is_termination_msg=termination_message,
         human_input_mode="ALWAYS",
         llm_config=llm_config.copy(),
-        description="Analyze the Planner's plan content or User's intent to write some shell",
+        description="Analyze the Planner's plan content or User's intent to write some shell/command",
         system_message="""You are a Kubernetes Engineer.
 
 Your task is to analyze the user's intent to perform actions on resources and convert this intent into shell commands using your expertise with CLI like `kubectl`, `grep` and `awk`.

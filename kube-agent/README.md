@@ -1,33 +1,38 @@
-# Kube Agent
+# Kubernetes Multi-Agents System
 
-### Kube Engineer
+## Relationship
 
-- Role: Manages and configures Kubernetes components and resources.
-  - Tasks:
-    - Manipulates Kubernetes resources (e.g., listing, describing, logging).
-    - Extracts abnormal or unusual information based on user input.
-    - Provides context for a Kubernetes application, detailing components and their configurations.
+```mermaid
+---
+title: Kubernetes Multi-Agents System
+---
+stateDiagram-v2
+    Manager --> User
+    Manager --> Planner
+    Manager --> Engineer
+    Manager --> Executor
+    Manager --> Application
+```
 
-### Code Analyzer
+## Roles
 
-- Role: Analyzes code from GitHub repositories.
+- Kubernetes Engineer: Analyze the Planner's plan content or User's intent to write some shell/command
 
-- Tasks:
+- Kubectl Proxy: Execute the code written by the 'Kubernetes Engineer' and report the result
+
+- Planner: Given a task, determine what information is needed to complete the task. After each step is done by others, check the progress and instruct the remaining steps
+
+- User proxy: On behalf the User/Admin, give the initial prompt to the group chat, Allow the user to comment on the result and ask other agent to modify the prompt.
+
+- Application proxy: Provide the application information of the Planner want to achieve(ongoing...)
+
+### TODO:
+
+- Code Analyzer: Analyzes code from GitHub repositories.
   - Fetches code from repositories.
   - Analyzes the logic of the code.
   - Identifies errors/warning messages and provides possible advice and a summary.
 
-### Program Debugger
-
-- Role: Debugs and patches code based on analysis.
-- Tasks:
+- Program Debugger: Debugs and patches code based on analysis.
   - Attempts to patch fixes based on findings from the Code Analyzer.
   - Writes validations for the applied patches.
-
-### User Application
-
-- Role: Provides user-facing context for Kubernetes applications.
-- Tasks:
-  - Explains the system's components.
-  - Guides configuration steps for components like CRD, ConfigMap, and Secret.
-  - Clarifies the role of each component in the system
