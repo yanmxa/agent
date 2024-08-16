@@ -6,3 +6,4 @@ agent.cast
 agent.gif
 .cache
 .DS_Store
+__kubecache__

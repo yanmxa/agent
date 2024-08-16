@@ -4,21 +4,24 @@ from autogen import ConversableAgent
 from autogen.coding import LocalCommandLineCodeExecutor
 
 # Create a temporary directory to store the code files.
-temp_dir = tempfile.TemporaryDirectory()
+# temp_dir = tempfile.TemporaryDirectory()
 
 # Create a local command line code executor.
 # Use the IPython code executor
 executor = LocalCommandLineCodeExecutor(
     timeout=10,  # Timeout for each code execution in seconds.
-    work_dir=temp_dir.name,  # Use the temporary directory to store the code files.
+    work_dir="coding",  # Use the temporary directory to store the code files.
 )
 
 # Create an agent with code executor configuration.
 code_executor_agent = ConversableAgent(
     "code_executor_agent",
     llm_config=False,  # Turn off LLM for this agent.
-    code_execution_config={"executor": executor},  # Use the local command line code executor.
+    code_execution_config={
+        "executor": executor
+    },  # Use the local command line code executor.
     human_input_mode="ALWAYS",  # Always take human input for this agent for safety.
+    default_auto_reply="Please continue. If everything is done, reply 'TERMINATE'.",
 )
 
 # The code writer agent's system message is to instruct the LLM on how to use
@@ -39,13 +42,14 @@ Reply 'TERMINATE' in the end when everything is done.
 import os
 from autogen import ConversableAgent
 from dotenv import load_dotenv
+
 load_dotenv()
 config_list = [
-  {
-    "model": "llama-3.1-70b-versatile",
-    "base_url": "https://api.groq.com/openai/v1",
-    "api_key": os.getenv('GROQ_API_KEY'),
-  }
+    {
+        "model": "llama-3.1-70b-versatile",
+        "base_url": "https://api.groq.com/openai/v1",
+        "api_key": os.getenv("GROQ_API_KEY"),
+    }
 ]
 
 code_writer_agent = ConversableAgent(
@@ -63,4 +67,3 @@ chat_result = code_executor_agent.initiate_chat(
     message=f"Today is {today}. Write Python code to plot TSLA's and META's "
     "changes of the stock price gains YTD, and save the plot to a file named 'stock_gains.png'.",
 )
-

@@ -1,8 +1,14 @@
 import os
+import sys
 import autogen
-import argparse
-from kube_agent import kube_engineer, kube_executor, user_proxy
-from tools import KubeTool
+
+from kube_agents import (
+    kube_engineer,
+    kubectl_proxy,
+    application_proxy,
+    kube_planner,
+    user_proxy,
+)
 
 from dotenv import load_dotenv
 
@@ -14,42 +20,47 @@ llm_config = {
             "model": "llama-3.1-70b-versatile",
             "base_url": "https://api.groq.com/openai/v1",
             "api_key": os.getenv("GROQ_API_KEY"),
+            "price": [0, 0],
         }
     ]
 }
 
 
-def main(prompt: str):
-    kube_tool = KubeTool()
-    engineer = kube_engineer(llm_config, kube_tool)
-    executor = kube_executor(kube_tool)
-
+def main(prompt):
     user = user_proxy()
+    kubectl = kubectl_proxy()
+    engineer = kube_engineer(llm_config)
+    application = application_proxy(llm_config)
+    planner = kube_planner(llm_config)
 
-    manager = autogen.GroupChatManager(
-        groupchat=autogen.GroupChat(
-            agents=[user, engineer, executor],
-            messages=[],
-            max_round=10,
-        ),
-        llm_config=llm_config,
+    group_chat = autogen.GroupChat(
+        agents=[user, engineer, kubectl, application, planner],
+        messages=[],
+        max_round=10,
+        allowed_or_disallowed_speaker_transitions={
+            user: [engineer, application, kubectl, planner],
+            planner: [user, engineer, application],
+            engineer: [user, kubectl],
+            application: [user, planner],
+            kubectl: [user, engineer, planner],
+        },
+        speaker_transitions_type="allowed",
     )
 
-    user.initiate_chat(
+    manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=llm_config)
+
+    group_chat_result = user.initiate_chat(
         manager,
-        clear_history=True,
-        message="""
-        Try to analyze the user provided PROMPT by the "Kubernetes Engineer"
-        
-        PROMPT: {{prompt}}""",
+        message=prompt,
     )
+    # chat_result = kubectl.initiate_chat(engineer, message=prompt)
+
+    print(">> Summary =================================")
+    print(group_chat_result.summary)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Multi-Agent system for Kubernetes Applications"
-    )
-    parser.add_argument("-p", "--prompt", type=str, help="Action you want to perform.")
-
-    args = parser.parse_args()
-    main(args.prompt)
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
+    else:
+        print("No parameters were provided.")
