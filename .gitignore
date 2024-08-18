@@ -7,3 +7,4 @@ agent.gif
 .cache
 .DS_Store
 __kubecache__
+__chromadb__

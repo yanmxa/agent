@@ -1,7 +1,7 @@
 import os
 import sys
 import autogen
-
+import kube_agents
 from kube_agents import (
     kube_engineer,
     kubectl_proxy,
@@ -27,36 +27,48 @@ llm_config = {
 
 
 def main(prompt):
-    user = user_proxy()
-    kubectl = kubectl_proxy()
-    engineer = kube_engineer(llm_config)
-    application = application_proxy(llm_config)
-    planner = kube_planner(llm_config)
 
-    group_chat = autogen.GroupChat(
-        agents=[user, engineer, kubectl, application, planner],
-        messages=[],
-        max_round=10,
-        allowed_or_disallowed_speaker_transitions={
-            user: [engineer, application, kubectl, planner],
-            planner: [user, engineer, application],
-            engineer: [user, kubectl],
-            application: [user, planner],
-            kubectl: [user, engineer, planner],
-        },
-        speaker_transitions_type="allowed",
+    rag_assistant = kube_agents.rag_assistant(llm_config)
+    rag_agent = kube_agents.rag_agent(llm_config["config_list"])
+    rag_assistant.reset()
+    qa_problem = "How to configure the global hub system by api?"
+    result = rag_agent.initiate_chat(
+        rag_assistant,
+        message=rag_agent.message_generator,
+        problem=qa_problem,
     )
+    # print(result.chat_history)
 
-    manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=llm_config)
+    # user = user_proxy()
+    # kubectl = kubectl_proxy()
+    # engineer = kube_engineer(llm_config)
+    # application = application_proxy(llm_config)
+    # planner = kube_planner(llm_config)
 
-    group_chat_result = user.initiate_chat(
-        manager,
-        message=prompt,
-    )
-    # chat_result = kubectl.initiate_chat(engineer, message=prompt)
+    # group_chat = autogen.GroupChat(
+    #     agents=[user, engineer, kubectl, application, planner],
+    #     messages=[],
+    #     max_round=10,
+    #     allowed_or_disallowed_speaker_transitions={
+    #         user: [engineer, application, kubectl, planner],
+    #         planner: [user, engineer, application],
+    #         engineer: [user, kubectl],
+    #         application: [user, planner],
+    #         kubectl: [user, engineer],
+    #     },
+    #     speaker_transitions_type="allowed",
+    # )
 
-    print(">> Summary =================================")
-    print(group_chat_result.summary)
+    # manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=llm_config)
+
+    # group_chat_result = user.initiate_chat(
+    #     manager,
+    #     message=prompt,
+    # )
+    # # chat_result = kubectl.initiate_chat(engineer, message=prompt)
+
+    # print(">> Summary =================================")
+    # print(group_chat_result.summary)
 
 
 if __name__ == "__main__":

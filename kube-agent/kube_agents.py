@@ -1,7 +1,12 @@
+import json
 import os
 
 import autogen
+import chromadb
 from autogen.coding import LocalCommandLineCodeExecutor
+from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent
+from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from tools import termination_message
 
@@ -57,9 +62,47 @@ def kubectl_proxy() -> autogen.ConversableAgent:
 def user_proxy():
     return autogen.UserProxyAgent(
         name="User",
-        system_message="Input your initial prompt",
         human_input_mode="ALWAYS",
         is_termination_msg=termination_message,
+        code_execution_config=False,  # we don't want to execute code in this case.
+        default_auto_reply="Reply `TERMINATE` if the task is done.",
+        description="The user who ask questions and give tasks.",
+    )
+
+
+def rag_assistant(llm_config):
+    return RetrieveAssistantAgent(
+        name="assistant",
+        system_message="You are a helpful assistant.",
+        llm_config=llm_config.copy(),
+    )
+
+
+def rag_agent(config_list):
+    recur_splitter = RecursiveCharacterTextSplitter(separators=["\n", "\r", "\t"])
+    return RetrieveUserProxyAgent(
+        name="Rag Agent",
+        is_termination_msg=termination_message,
+        human_input_mode="NEVER",
+        default_auto_reply="Reply `TERMINATE` if the task is done.",
+        max_consecutive_auto_reply=3,
+        retrieve_config={
+            "task": "default",
+            "docs_path": [
+                "https://raw.githubusercontent.com/stolostron/multicluster-global-hub/main/doc/README.md",
+                "https://raw.githubusercontent.com/stolostron/multicluster-global-hub/main/operator/apis/v1alpha4/multiclusterglobalhub_types.go",
+            ],
+            "chunk_token_size": 1000,
+            "model": config_list[0]["model"],
+            "client": chromadb.PersistentClient(
+                path=os.path.join(current_working_directory, "__chromadb__")
+            ),
+            "collection_name": "groupchat",
+            "get_or_create": True,
+            "custom_text_split_function": recur_splitter.split_text,
+        },
+        code_execution_config=False,  # we don't want to execute code in this case.
+        description="Rag Agent who is equipped with advanced content retrieval abilities, specifically focused on acquiring and processing information related to the Global Hub System. This includes detailed knowledge of the system's API and the various components that comprise the system.",
     )
 
 
@@ -164,6 +207,7 @@ Summarize the resource usage like this, but you make make the output more clear 
 
 Please remember: 
 - Try to using English and avoid using some wired characters
+- Try to complete the task in as few steps as possibly.For example, you can combine shell commands into scripts
 - Each message you send to Executor can contain only 1 code block
 
 Return 'TERMINATE' when the task is complete.
