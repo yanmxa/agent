@@ -46,7 +46,7 @@ def kube_planner(llm_config: dict) -> autogen.ConversableAgent:
 def kubectl_proxy() -> autogen.ConversableAgent:
     return autogen.ConversableAgent(
         "Executor",
-        description="Execute the code written by the 'Kubernetes Engineer' and report the result",
+        description="Execute the code written by the 'Kubernetes Engineer' and report the result to it. Invoke me only when you have code block to run",
         llm_config=False,
         code_execution_config={
             "executor": LocalCommandLineCodeExecutor(
@@ -112,7 +112,7 @@ def kube_engineer(llm_config: dict):
         is_termination_msg=termination_message,
         human_input_mode="ALWAYS",
         llm_config=llm_config.copy(),
-        description="Analyze the Planner's plan content or User's intent to write some shell/command",
+        description="Analyze the Planner's plan content to write some shell/command.",
         system_message="""You are a Kubernetes Engineer.
 
 Your task is to analyze the user's intent to perform actions on resources and convert this intent into shell commands using your expertise with CLI like `kubectl`, `grep` and `awk`.
