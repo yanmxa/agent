@@ -8,3 +8,5 @@ agent.gif
 .DS_Store
 __kubecache__
 __chromadb__
+tmp
+coding

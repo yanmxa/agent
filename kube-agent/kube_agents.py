@@ -206,7 +206,7 @@ Summarize the resource usage like this, but you make make the output more clear 
 - Both pods belong to the `multicluster-global-hub-manager` deployment, with a total CPU usage of 3m and memory usage of 75Mi.
 
 Please remember: 
-- Try to using English and avoid using some wired characters
+- Try to using simple English and avoid using some wired characters
 - Try to complete the task in as few steps as possibly.For example, you can combine shell commands into scripts
 - Each message you send to Executor can contain only 1 code block
 
@@ -227,20 +227,10 @@ def application_proxy(llm_config: dict) -> autogen.ConversableAgent:
         You can achieve the information of an application system. currently you only return the global hub application's information. Detailed in the following:
 
         The multicluster global hub is a set of components that enable you to import one or more hub clusters and manage them from a single hub cluster.
-
-        After importing the hub clusters as managed hub clusters, you can use multicluster global hub to complete the following tasks across all of the managed hub clusters:
-
-          - Report the policy compliance status and trend
-          - Inventory all managed hubs and managed clusters on the overview page
-          - Detect and alert in cases of irregular policy behavior
-          
-        The multicluster global hub is useful when a single hub cluster cannot manage the large number of clusters in a high-scale environment. When this happens, you divide the clusters into smaller groups of clusters and configure a hub cluster for each group.
-
-        It is often inconvenient to view the data on multiple hub clusters for the managed clusters that are managed by that hub cluster. The multicluster global hub provides an easier way to view information from multiple hubs by designating multiple hub clusters as managed hub clusters. The multicluster global hub cluster manages the other hub clusters and gathers summarized information from the managed hub clusters.
         
-        The multicluster global hub consists of the following components that are used to access and manage your hub clusters:
+        The multicluster global hub consists of the following components, if you want to troubleshooting the system, you can check them one by one:
         
-          - The multiclusterglobalhub crd, it the configurations of the global hub system
+          - The CR is multiclusterglobalhub, it the configurations of the global hub system, you can check it first
           - The multicluster global hub operator contains the components of multicluster global hub. The operator
           deploys all of the required components for global multicluster management. The components include `multicluster-global-hub-manager`, `multicluster-global-hub-grafana`, and provided versions of `Kafka` and `PostgreSQ`L in the multicluster global hub cluster and `multicluster-global-hub-agent` in the managed hub clusters.
           - The multicluster global hub manager is used to persist the data into the postgreSQL database. The data is from Kafka transport. The manager also posts the data to the Kafka transport, so it can be synchronized with the data on the managed hub clusters.
