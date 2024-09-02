@@ -2,10 +2,10 @@
 
 Build various interesting agents to transform your work and even your lifestyle!
 
-- [Agent Revolution](./agent-evolution.md): An introduction to the "evolution" of agents
-- [AI Agent from scratch](./scratch/README.md): Learn how AI agents are built from the ground up
-- [AI Agent Frameworks](./frameworks.md)
-- [Samples Using autogen](./autogen/)
-- [Kube Agent](./kube-agent/): Explore how to integrate agents with Kubernetes
-- [OCM agents](https://github.com/yanmxa/ocm-agents): Using Multi-agents to Troubleshoot an Open-Cluster-Management environment
-- [How to Wear](./how-to-wear/README.md): Guidance on how to dress based on weather, designer input, and fashion trends
+- [Agent Revolution](./agent-evolution.md): Explore the evolution and advancement of AI agents
+- [AI Agent from Scratch](./scratch/README.md): Step-by-step guide to building AI agents from the ground up
+- [AI Agent Frameworks](./frameworks.md): Overview of popular frameworks for developing AI agents
+- [Autogen Samples](./autogen/): Practical examples using the Autogen framework
+- [Kube Agent](./kube-agent/): Integrating AI agents with Kubernetes
+- [OCM Agents](https://github.com/yanmxa/ocm-agents): Leveraging multi-agent systems for Open Cluster Management troubleshooting
+- [AI Stylist](./how-to-wear/README.md): AI-powered fashion recommendations based on weather, designer insights, and current trends
