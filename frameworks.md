@@ -1,4 +1,3 @@
-Here’s the cleaned and readable comparison table for the frameworks:
 
 | **Attribute**                  | **[AutoGen](https://github.com/microsoft/autogen)** | **[CrewAI](https://github.com/crewAIInc/crewAI)** | **[LangChain](https://github.com/langchain-ai/langchain)** | **[OpenAI Swarm](https://github.com/openai/swarm)** | **[Phidata](https://github.com/phidatahq/phidata)** | **[Agent Zero](https://github.com/frdel/agent-zero)** |
 |--------------------------------|-------------------------------------------------------------|---------------------------------------------------|-----------------------------------------------------------|---------------------------------------------------|---------------------------------------------------|-----------------------------------------------------|
@@ -12,4 +11,3 @@ Here’s the cleaned and readable comparison table for the frameworks:
 | **Pros**                       | Backed by Microsoft, well-documented, highly active      | Specialized for creativity, innovative approach    | Popular, versatile, and community-supported              | Scalable, collaborative agent systems            | User-friendly, actively developed                | Lightweight, easy to set up                      |
 | **Cons**                       | May be complex for beginners, Microsoft-centric          | Niche use cases, evolving features                 | Can be overwhelming due to extensive features            | Requires advanced understanding                  | Still maturing, some advanced features missing   | Limited functionality, smaller community         |
 
-This version is clean and highlights key points in a structured, easy-to-read format.
