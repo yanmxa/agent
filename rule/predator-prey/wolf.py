@@ -98,9 +98,9 @@ class Wolf:
 
             # Wolves that have eaten more will have an increased chance to breed
             if self.food_intake > 0:
-                breeding_chance += 0.2  # Increase chance by 20% for higher food intake
+                breeding_chance += 0.1  # Increase chance by 10% for higher food intake
             else:
-                breeding_chance -= 0.2
+                breeding_chance -= 0.5
 
             # Random chance to breed based on age and food intake
             if random.random() > breeding_chance:
