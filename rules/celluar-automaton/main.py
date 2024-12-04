@@ -5,8 +5,8 @@ import numpy as np
 pygame.init()
 
 # Constants
-GRID_SIZE = 100  # Size of the grid
-CELL_SIZE = 5  # Pixel size of each cell
+GRID_SIZE = 200  # Size of the grid
+CELL_SIZE = 6  # Pixel size of each cell
 WIDTH, HEIGHT = GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE  # Window size
 FPS = 10  # Frames per second, controls the speed of the simulation
 

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wolf, Rabbit, and Grass Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="simulationCanvas"></canvas>
+    <script>
+        // Constants
+        const CELL_SIZE = 26;  // Cell size for better fitting
+        const ROWS = 30, COLS = 60;  // Grid size
+        const FPS = 30;
+
+        // Colors
+        const WHITE = "#FFFFFF";
+        const LINE_COLOR_WOLF = "#FF0000";  // Red for wolves
+        const LINE_COLOR_RABBIT = "#00FFFF";  // Cyan for rabbits
+        const LINE_COLOR_GRASS = "#00FF00";  // Green for grass
+
+        const canvas = document.getElementById("simulationCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas dimensions
+        canvas.width = COLS * CELL_SIZE;
+        canvas.height = ROWS * CELL_SIZE + 150;  // Extra space for the chart
+
+        // Entities
+        const wolves = [];
+        const rabbits = [];
+        const grasses = [];
+
+        // Grid map to store entities
+        const gridMap = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+
+        // History to track counts for line chart
+        const history = [];
+
+        // Helper classes
+        class Wolf {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        class Rabbit {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        class Grass {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        // Place entities in the grid
+        function placeEntities() {
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    const val = Math.random();
+                    if (val < 0.02) {
+                        gridMap[row][col] = new Wolf(col, row);
+                        wolves.push(gridMap[row][col]);
+                    } else if (val < 0.3) {
+                        gridMap[row][col] = new Rabbit(col, row);
+                        rabbits.push(gridMap[row][col]);
+                    } else if (val < 0.6) {
+                        gridMap[row][col] = new Grass(col, row);
+                        grasses.push(gridMap[row][col]);
+                    }
+                }
+            }
+        }
+
+        // Draw grid
+        function drawWindow() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear the canvas
+            ctx.fillStyle = WHITE;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);  // Set background to white
+
+            // Draw entities
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    const cell = gridMap[row][col];
+                    if (cell instanceof Wolf) {
+                        ctx.fillStyle = LINE_COLOR_WOLF;
+                        ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    } else if (cell instanceof Rabbit) {
+                        ctx.fillStyle = LINE_COLOR_RABBIT;
+                        ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    } else if (cell instanceof Grass) {
+                        ctx.fillStyle = LINE_COLOR_GRASS;
+                        ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+
+            // Track counts in history
+            history.push([wolves.length, rabbits.length, grasses.length]);
+
+            // Draw line chart
+            drawLineChart();
+        }
+
+        // Draw the line chart
+        function drawLineChart() {
+            const chartHeight = 150;
+            const chartWidth = canvas.width;
+            const chartBottom = canvas.height;
+
+            // Background gradient for the chart
+            const gradientStart = { r: 245, g: 245, b: 245 };  // Light gray
+            const gradientEnd = { r: 255, g: 255, b: 255 };  // White
+            for (let i = 0; i < chartHeight; i++) {
+                const r = Math.round(gradientStart.r + (gradientEnd.r - gradientStart.r) * (i / chartHeight));
+                const g = Math.round(gradientStart.g + (gradientEnd.g - gradientStart.g) * (i / chartHeight));
+                const b = Math.round(gradientStart.b + (gradientEnd.b - gradientStart.b) * (i / chartHeight));
+                ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+                ctx.beginPath();
+                ctx.moveTo(0, chartBottom - chartHeight + i);
+                ctx.lineTo(chartWidth, chartBottom - chartHeight + i);
+                ctx.stroke();
+            }
+
+            // Max y value for the chart
+            const maxYValue = Math.max(
+                ...history.map(h => Math.max(h[0], h[1], h[2])),
+                1
+            );
+            const xScale = (chartWidth - 20) / history.length;
+            const yScale = (chartHeight - 40) / maxYValue;
+
+            // Draw lines for each entity type (wolves, rabbits, grass)
+            let lastWolfPos = null;
+            let lastRabbitPos = null;
+            let lastGrassPos = null;
+
+            history.forEach((counts, i) => {
+                const wolfPos = {
+                    x: 10 + i * xScale,
+                    y: chartBottom - 20 - counts[0] * yScale,
+                };
+                const rabbitPos = {
+                    x: 10 + i * xScale,
+                    y: chartBottom - 20 - counts[1] * yScale,
+                };
+                const grassPos = {
+                    x: 10 + i * xScale,
+                    y: chartBottom - 20 - counts[2] * yScale,
+                };
+
+                // Draw lines for wolves, rabbits, and grass
+                if (lastWolfPos) {
+                    ctx.strokeStyle = LINE_COLOR_WOLF;
+                    ctx.beginPath();
+                    ctx.moveTo(lastWolfPos.x, lastWolfPos.y);
+                    ctx.lineTo(wolfPos.x, wolfPos.y);
+                    ctx.stroke();
+                }
+                lastWolfPos = wolfPos;
+
+                if (lastRabbitPos) {
+                    ctx.strokeStyle = LINE_COLOR_RABBIT;
+                    ctx.beginPath();
+                    ctx.moveTo(lastRabbitPos.x, lastRabbitPos.y);
+                    ctx.lineTo(rabbitPos.x, rabbitPos.y);
+                    ctx.stroke();
+                }
+                lastRabbitPos = rabbitPos;
+
+                if (lastGrassPos) {
+                    ctx.strokeStyle = LINE_COLOR_GRASS;
+                    ctx.beginPath();
+                    ctx.moveTo(lastGrassPos.x, lastGrassPos.y);
+                    ctx.lineTo(grassPos.x, grassPos.y);
+                    ctx.stroke();
+                }
+                lastGrassPos = grassPos;
+            });
+
+            // Draw labels
+            ctx.fillStyle = LINE_COLOR_WOLF;
+            ctx.fillText("Wolves", chartWidth - 90, chartBottom - 40);
+            ctx.fillStyle = LINE_COLOR_RABBIT;
+            ctx.fillText("Rabbits", chartWidth - 90, chartBottom - 60);
+            ctx.fillStyle = LINE_COLOR_GRASS;
+            ctx.fillText("Grass", chartWidth - 90, chartBottom - 80);
+        }
+
+        // Main simulation loop
+        let month = 0;
+        function gameLoop() {
+            setTimeout(() => {
+                // Simulate the passage of time
+                month++;
+                placeEntities();
+                drawWindow();
+
+                // Game loop
+                requestAnimationFrame(gameLoop);
+            }, 1000 / FPS);
+        }
+
+        // Start the simulation
+        gameLoop();
+    </script>
+</body>
+</html>
