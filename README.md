@@ -5,6 +5,7 @@ Agents are intelligent systems that evolve and adapt to reshape how we work and 
 ## The 3 Core Aspects of Agents
 
 ### **1. Modeling the World: Simulation Agents**  
+
 Simulation agents replicate real-world systems in virtual environments, allowing us to test scenarios, analyze behavior, and predict outcomes without real-world consequences.
 
 **Key Role**: **Model** complex systems to experiment and observe.
@@ -14,6 +15,7 @@ Simulation agents replicate real-world systems in virtual environments, allowing
 ---
 
 ### **2. Learning from Interaction: RL Agents**  
+
 Reinforcement Learning (RL) agents learn by interacting with their environment. They refine their actions through trial and error, improving their performance over time based on feedback.
 
 **Key Role**: **Learn** from experience to adapt and optimize decisions.
@@ -23,6 +25,7 @@ Reinforcement Learning (RL) agents learn by interacting with their environment. 
 ---
 
 ### **3. Autonomous Decision-Making: AI Agents**  
+
 AI agents integrate modeling and learning, enabling them to perform tasks autonomously, make decisions, and continuously improve by interacting with the real world and analyzing data.
 
 **Key Role**: **Automate** tasks and optimize decisions without constant supervision.
@@ -41,7 +44,7 @@ Agents offer more than just analytical tools. They enable us to **model** system
 
 - **[Agent Revolution](./agent-evolution.md)**: Explore the evolution of AI agents.
 - **[Heuristic Agents](./heuristic)**: Check out agent simulations that inspire real-world applications.
-- **[Chat Agent](https://github.com/yanmxa/chat-agent)**: Explore agent-based workflows in action.
+- **[Chat Agent](https://github.com/yanmxa/chat-agent)**: Explore [agentic workflows](https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/?ref=dl-staging-website.ghost.io) in action.
 - **[AI Agent from Scratch](./ai-agent/README.md)**: Learn to build AI agents from the ground up.
 - **[AI Agent Frameworks](./frameworks.md)**: Discover popular frameworks for building intelligent agents.
 - **[ACM Agents](https://github.com/yanmxa/acm-agents)**: Optimize Open Cluster Management with multi-agent systems.
