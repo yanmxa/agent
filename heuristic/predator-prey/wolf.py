@@ -109,7 +109,6 @@ class Wolf:
             row, col = self.position
             grass_and_rabbit_cells = []
 
-            # Step 1: Find all neighboring cells with grass or rabbit
             for i in range(row - 1, row + 2):
                 for j in range(col - 1, col + 2):
                     if 0 <= i < self.ctx.row_num and 0 <= j < self.ctx.col_num:
